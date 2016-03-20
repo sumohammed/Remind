@@ -10,9 +10,9 @@ class ToDos
 	attr_accessor :input_date
 	attr_accessor :task
 
-=begin 
+=begin
 	initialize each activity with the Activity Name and Completion Date
-	automatically the activity is added with the time stamp i.e 
+	automatically the activity is added with the time stamp i.e
 	the activity entry date and time
 =end
 	def initialize(task , completion_date)
