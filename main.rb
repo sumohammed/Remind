@@ -2,14 +2,13 @@
 	A simple TODOs App
 =end
 class ToDos
-	# class fields / or static fields
+  #class fields / or static fields
 	@@todo_base = Hash.new
 	@@todo_count = 0
 
 	# attribute accessors
 	attr_accessor :input_date
 	attr_accessor :task
-
 =begin
 	initialize each activity with the Activity Name and Completion Date
 	automatically the activity is added with the time stamp i.e
@@ -30,9 +29,9 @@ class ToDos
 	end
 =begin
 	this method prints to the standard output i.e console
-	the details of an activity(i.e an instance of the todos class 
+	the details of an activity(i.e an instance of the todos class
 	in other words the object)
-	Usage: this is called on the object by supplying the name of the 
+	Usage: this is called on the object by supplying the name of the
 		   activity
 =end
 	def info
@@ -44,10 +43,10 @@ class ToDos
 		puts "________________________________________"
 	end
 =begin
-	this method prints to he  stdout the total number of 
+	this method prints to he  stdout the total number of
 	todos e.g You have 2 task(s) currently in ToDOs
 	NB : This is a static or class method meaning this method belongs
-	to this class i.e todos and not a particular instance 
+	to this class i.e todos and not a particular instance
 	in other words this method cannot operate on an object but rather
 	the class
 =end
@@ -59,16 +58,14 @@ class ToDos
 		puts "You have #{@@todo_count} task(s) currently in ToDOs"
 		puts "________________________________________"
 	end
-
 =begin
-	this method prints to he  stdout the list of list of 
+	this method prints to he  stdout the list of list of
 	all the todos with their assigned completion dates
 	NB : This is a static or class method meaning this method belongs
-	to this class i.e todos and not a particular instance 
+	to this class i.e todos and not a particular instance
 	in other words this method cannot operate on an object but rather
 	the class
 =end
-
 	def self.list
 		puts ""
 		puts "________________________________________"
@@ -82,7 +79,6 @@ class ToDos
 	end
 
 end
-
 #Object initialization and  method / class method calss calls
 RubyClass    = ToDos.new("RubyClass   "  , "21-03-2016")
 PythonClass  = ToDos.new("PythonClass "  , "22-03-2016")
