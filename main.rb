@@ -22,10 +22,9 @@ class ToDos
 			completion_date = gets.chomp!
 			@input_date = Time.now
 			add_todo(task_name , completion_date)
-			response = add_new_task
+			response = add_new_task?
 			break if  response == "no"
 			puts "________________________________________"
-	
 		end
 	end
 =begin
@@ -87,7 +86,7 @@ class ToDos
 		end
 		puts "________________________________________"
 	end
-	def add_new_task
+	def add_new_task?
 		print "Add new task ? (Yes / No )"
 		response =  gets.chomp.downcase
 		return response
