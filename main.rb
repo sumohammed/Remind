@@ -79,7 +79,7 @@ class ToDos
 	end
 
 end
-#Object initialization and  method / class method calss calls
+#Object initialization and  method / class method calls
 RubyClass    = ToDos.new("RubyClass   "  , "21-03-2016")
 PythonClass  = ToDos.new("PythonClass "  , "22-03-2016")
 JavaClass    = ToDos.new("JavaClass   "  , "22-03-2016")
@@ -93,3 +93,4 @@ Hackthon2016.info
 
 ToDos.list
 ToDos.count
+
