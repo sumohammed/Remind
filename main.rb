@@ -14,9 +14,19 @@ class ToDos
 	automatically the activity is added with the time stamp i.e
 	the activity entry date and time
 =end
-	def initialize(task , completion_date)
-		@input_date = Time.now
-		add_todo(task , completion_date)
+	def initialize()
+		while 1
+			print "Task Name:"
+			task_name = gets.chomp!
+			print "Completion Date:"
+			completion_date = gets.chomp!
+			@input_date = Time.now
+			add_todo(task_name , completion_date)
+			response = add_new_task
+			break if  response == "no"
+			puts "________________________________________"
+	
+		end
 	end
 =begin
 	this method is called only by the constructor and not
@@ -76,23 +86,36 @@ class ToDos
 			puts "#{todo} :------------->#{completion_date}"
 		end
 		puts "________________________________________"
-		# puts @@todo_base
 	end
-
+	def add_new_task
+		print "Add new task ? (Yes / No )"
+		response =  gets.chomp.downcase
+		return response
+	end
 end
 #Object initialization and  method / class method calls
-RubyClass    = ToDos.new("RubyClass   "  , "21-03-2016")
-PythonClass  = ToDos.new("PythonClass "  , "22-03-2016")
-JavaClass    = ToDos.new("JavaClass   "  , "22-03-2016")
-Hackthon2016 = ToDos.new("Hackthon2016"  , "31-12-2016")
-Ispace 		 = ToDos.new("Ispace Pitch"  , "25-06-2016")
 
-RubyClass.info
-JavaClass.info
-PythonClass.info
-Hackthon2016.info
+main = ToDos.new
+# puts RubyClass.info
+# PythonClass  = ToDos.new("PythonClass "  , "22-03-2016")
+# JavaClass    = ToDos.new("JavaClass   "  , "22-03-2016")
+# Hackthon2016 = ToDos.new("Hackthon2016"  , "31-12-2016")
+# Ispace 		 = ToDos.new("Ispace Pitch"  , "25-06-2016")
 
-ToDos.list
-ToDos.count
+# RubyClass.info
+# JavaClass.info
+# PythonClass.info
+# Hackthon2016.info
 
+# ToDos.list
+# ToDos.count
+
+# functionalites
+# getuser input
+# 	- *get task name (only required)
+# 	- get completion_date
+# update
+
+# notifications
+# database integration
 
