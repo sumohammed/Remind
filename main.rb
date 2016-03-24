@@ -76,6 +76,7 @@ class ToDos
 			puts "#{todo} :------------->#{completion_date}"
 		end
 		puts "________________________________________"
+		# puts @@todo_base
 	end
 
 end
@@ -93,4 +94,5 @@ Hackthon2016.info
 
 ToDos.list
 ToDos.count
+
 
