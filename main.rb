@@ -5,7 +5,6 @@ class ToDos
   #class fields / or static fields
 	@@todo_base = Hash.new
 	@@todo_count = 0
-
 	# attribute accessors
 	attr_accessor :input_date
 	attr_accessor :task
@@ -16,17 +15,34 @@ class ToDos
 =end
 	def initialize()
 		while 1
-			print "Task Name:"
-			task_name = gets.chomp!
-			print "Completion Date:"
-			completion_date = gets.chomp!
-			@input_date = Time.now
-			add_todo(task_name , completion_date)
-			response = add_new_task?
-			break if  response == "no"
-			puts "________________________________________"
+			# always gets the input 
+			print "Todo: enter command ☻ :"
+			prompt =  gets.chomp.downcase
+
+			# test input
+			case prompt
+				when "add"
+					new_task
+				when "info"
+					#info
+				when "help"
+					help
+				when "count"
+					#count
+				when "list"
+					#list
+				when "version"
+					#version
+				when "update"
+					#help
+				when "bye"
+					bye
+				else
+					puts "Todo: invalid command *#{prompt}* (typing help will show vaild commands ) (RuntimeError)"
+			end
 		end
 	end
+
 =begin
 	this method is called only by the constructor and not
     outside
@@ -86,15 +102,64 @@ class ToDos
 		end
 		puts "________________________________________"
 	end
+
+	def new_task
+		while 1
+			print "Task Name/Description:"
+			task_name = gets.chomp!
+			print "Completion Date:"
+			completion_date = gets.chomp!
+			@input_date = Time.now
+			add_todo(task_name , completion_date)
+			response = add_new_task?
+			if  response == "n" or response =="no"
+				puts "________________________________________"
+				break
+			elsif  response == "y" or response == "yes"
+				puts "________________________________________"
+				next
+			else 
+				puts "Todo: invalid response!! "
+				add_new_task?
+			end
+		end
+	end
+
 	def add_new_task?
-		print "Add new task ? (Yes / No )"
+		print "Add new task ?  y/n: "
 		response =  gets.chomp.downcase
 		return response
 	end
+
+	def help
+		print  (<<-EOH)
+		Usage : <command> [<args>]
+		Some useful Todo commands are :
+		commands
+		add
+		info
+		count
+		list
+		update
+		version
+		bye
+		EOH
+	end
+
+	def bye
+		exit
+	end
 end
 #Object initialization and  method / class method calls
-
 main = ToDos.new
+
+
+# print  <<EOF
+# Usage : <command>
+# Some useful Todo commands are :
+# EOF
+# end
+
 # puts RubyClass.info
 # PythonClass  = ToDos.new("PythonClass "  , "22-03-2016")
 # JavaClass    = ToDos.new("JavaClass   "  , "22-03-2016")
@@ -117,4 +182,3 @@ main = ToDos.new
 
 # notifications
 # database integration
-
