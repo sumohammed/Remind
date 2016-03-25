@@ -28,9 +28,9 @@ class ToDos
 				when "help"
 					help
 				when "count"
-					#count
+					count
 				when "list"
-					#list
+					list
 				when "version"
 					#version
 				when "update"
@@ -75,7 +75,7 @@ class ToDos
 	in other words this method cannot operate on an object but rather
 	the class
 =end
-	def self.count
+	def count
 		puts ""
 		puts "________________________________________"
 		puts  "\t\tToDos Count"
@@ -91,7 +91,7 @@ class ToDos
 	in other words this method cannot operate on an object but rather
 	the class
 =end
-	def self.list
+	def list
 		puts ""
 		puts "________________________________________"
 		puts  "\t\tToDos List"
@@ -135,11 +135,11 @@ class ToDos
 		print  (<<-EOH)
 		Usage : <command> [<args>]
 		Some useful Todo commands are :
-		commands
-		add
-		info
-		count
-		list
+
+		add                add a new Todo 
+		info               Display the full details of a task
+		count              Gives a total count of all Todos
+		list               List all Todos availabel
 		update
 		version
 		bye
