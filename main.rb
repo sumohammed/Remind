@@ -6,25 +6,28 @@ class ToDos
 	@@todo_base = Hash.new
 	@@todo_count = 0
 	# attribute accessors
-	attr_accessor :input_date
-	attr_accessor :task
+	
 =begin
 	initialize each activity with the Activity Name and Completion Date
 	automatically the activity is added with the time stamp i.e
 	the activity entry date and time
 =end
 	def initialize()
+		welcome_m
 		while 1
 			# always gets the input 
 			print "Todo: enter command ☻ :"
-			prompt =  gets.chomp.downcase
+			prompt =  gets.chomp!.downcase
 
 			# test input
 			case prompt
 				when "add"
 					new_task
 				when "info"
-					#info
+					list
+					print"info about which Todo?:"
+					todo = gets.chomp.downcase
+					info(todo)
 				when "help"
 					help
 				when "count"
@@ -32,7 +35,7 @@ class ToDos
 				when "list"
 					list
 				when "version"
-					#version
+					version
 				when "update"
 					#help
 				when "bye"
@@ -49,7 +52,8 @@ class ToDos
 =end
 	def add_todo(task , completion_date)
 		@task = task
-		@@todo_base[task] = completion_date
+		@@todo_base[task] = [completion_date]
+		@@todo_base[task] << Time.now
 		@@todo_count+=1
 	end
 =begin
@@ -59,12 +63,13 @@ class ToDos
 	Usage: this is called on the object by supplying the name of the
 		   activity
 =end
-	def info
-		puts "\t\tToDos";
+	def info(task)
+		puts "\t\tToDos info";
 		puts "________________________________________"
-		puts "Task Name      : #{@task}"
-		puts "Input Date     : #{@input_date}"
-		puts "Completion Date: #{@@todo_base[task]}"
+		completion_date , input_date = @@todo_base[task]
+			puts "ToDo            : #{task}"
+			puts "Completion Date : #{completion_date}"
+			puts "Input Date      : #{input_date}"
 		puts "________________________________________"
 	end
 =begin
@@ -95,10 +100,9 @@ class ToDos
 		puts ""
 		puts "________________________________________"
 		puts  "\t\tToDos List"
-		puts  "ToDo\t\t\t Completion Date"
 		puts "________________________________________"
-		for todo , completion_date in @@todo_base
-			puts "#{todo} :------------->#{completion_date}"
+		for todo , completion_date in @@todo_base.to_a.sort!
+			puts "#{todo}"
 		end
 		puts "________________________________________"
 	end
@@ -109,7 +113,6 @@ class ToDos
 			task_name = gets.chomp!
 			print "Completion Date:"
 			completion_date = gets.chomp!
-			@input_date = Time.now
 			add_todo(task_name , completion_date)
 			response = add_new_task?
 			if  response == "n" or response =="no"
@@ -133,46 +136,38 @@ class ToDos
 
 	def help
 		print  (<<-EOH)
-		Usage : <command> [<args>]
+		Usage : <command> 
 		Some useful Todo commands are :
 
-		add                add a new Todo 
-		info               Display the full details of a task
-		count              Gives a total count of all Todos
-		list               List all Todos availabel
-		update
-		version
-		bye
+		add     :     Add a new Todo 
+		info    :     Display the full details of a task
+		count   :     Gives a total count of all Todos
+		list    :     List all Todos available
+		update  :     Updates an entry
+		remove  :     Removes an entry completely from Todo
+		version :     Show the current Todo version 
+		bye     :     Exit Todo
 		EOH
 	end
 
 	def bye
 		exit
 	end
+
+	def version
+		puts"1.1 beta"
+	end
+
+	def welcome_m
+		print (<<-EOW)
+	\t\t\t\tWELCOME 
+	Todos implements all the essential features of a collaborative task
+	management app. Type help to get started 
+	EOW
+	end
 end
 #Object initialization and  method / class method calls
 main = ToDos.new
-
-
-# print  <<EOF
-# Usage : <command>
-# Some useful Todo commands are :
-# EOF
-# end
-
-# puts RubyClass.info
-# PythonClass  = ToDos.new("PythonClass "  , "22-03-2016")
-# JavaClass    = ToDos.new("JavaClass   "  , "22-03-2016")
-# Hackthon2016 = ToDos.new("Hackthon2016"  , "31-12-2016")
-# Ispace 		 = ToDos.new("Ispace Pitch"  , "25-06-2016")
-
-# RubyClass.info
-# JavaClass.info
-# PythonClass.info
-# Hackthon2016.info
-
-# ToDos.list
-# ToDos.count
 
 # functionalites
 # getuser input
