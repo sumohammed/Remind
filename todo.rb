@@ -16,6 +16,7 @@ class Todo
 	def initialize
 		start
 	end
+
 	private
 	def mood
       a = []
@@ -47,6 +48,7 @@ class Todo
 
 		puts ""
 	end
+
 	def content(type="puts",colour="#00AFFF",content)
 		if type == "print"
 			print Paint[" "+content, colour,:bright]
