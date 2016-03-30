@@ -1,12 +1,12 @@
 =begin
 	A simple TODOs App
 =end
-require 'awesome_print'
 require 'paint'
+require 'dbi'
 
 class Todo
   #class fields / or static fields
-	@@todo_base = Hash.new
+	@@todo_base = {}
 	@@todo_count = 0
 =begin
 	initialize each activity with the Activity Name and Completion Date
@@ -234,14 +234,14 @@ class Todo
 			prompt?("Task Name")       ; task_name = input?
 			prompt?("Completion Date") ; completion_date = input?
 			add_todo(task_name , completion_date) ;response = add_new_task?
-			   if response[0] == "n" or response[0] =="no"
-				  line ; break
-			elsif response[0] == "y" or response[0] == "yes"
-				  line ; next
-			else
-				 warn!("invalid_option", response[0])
-				return
-			end
+			    if    response[0] == "n" or response[0] =="no"
+				     line ; break
+			    elsif response[0] == "y" or response[0] == "yes"
+				     line ; next
+			    else
+				     warn!("invalid_option", response[0])
+				     return
+				end
 		end
 	end
 
