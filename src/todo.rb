@@ -2,42 +2,67 @@
 	A simple TODOs App
 =end
 require 'paint'
-require 'dbi'
-
+require_relative 'base'
 class Todo
   #class fields / or static fields
 	@@todo_base = {}
 	@@todo_count = 0
+	 # sql querry statement handler (@@sth)- will handle all sql statements in this space
+	@@sth = nil
 =begin
 	initialize each activity with the Activity Name and Completion Date
 	automatically the activity is added with the time stamp i.e
 	the activity entry date and time
 =end
 	def initialize
-		start
+		login
 	end
 
 	private
 	def mood
       a = []
-      a << rand(257) 
+      a << rand(257)
       a << rand(257)
       a << rand(257)
       return a
 	end
+
+	def login
+		while true
+			count = 0
+		    # request user login credentials
+		    o_st ;  title("TODO ☻")
+		  	commandPrompt("Username")
+		    un = input?
+		 	commandPrompt("Password for #{un.split[0]}")
+		 	pw =input?
+		 	#(P-S-H)-IN THE SELECT CONTEXT
+		 	handler("SELECT * FROM user WHERE us = '#{un.split[0]}' and pw = '#{pw.split[0]}'").each{ |row|
+		 	  count+=1
+		 	}
+		 	case count
+		 	   	when 1
+		 	   		start_application
+		 	   	else
+		 	   	    content("puts","#E30000","Invalid login credentials , please try again")
+		 	   		next
+		 	end
+		end
+	end
+
 	def commandPrompt(command)
 
-		print Paint[" "+command +":" ,:white,:bright]
+		print Paint[" ".concat(command).concat(':'),:white,:bright]
 	end
 	def prompt?(question)
 
-		print Paint[" "+question+":" ,:white,:bright]
+		print Paint[" ".concat(question).concat(":") ,:white,:bright]
 	end
 	def title(type="puts" ,colour ="#FFA11A",title)
 		if type == "print"
-			print Paint[" "+title,colour,:bright]
+			print Paint[" ".concat(title),colour,:bright]
 		else
-			puts  Paint[" "+title,colour,:bright]
+			puts  Paint[" ".concat(title),colour,:bright]
 		end
 	end
 	def line
@@ -45,7 +70,6 @@ class Todo
 		puts Paint[" "+"________________________________________",:white,:bold]
 	end
 	def o_st
-
 		puts ""
 	end
 
@@ -70,6 +94,7 @@ class Todo
 	end
 
 	def result?(result, colour="#FFAF00")
+
 		puts Paint[" "+result,colour,:bright]
 	end
 	def header
@@ -79,7 +104,7 @@ class Todo
 		content("puts", "#fffff", "Type help or -h to get started" );
 	end
 
-	def start
+	def start_application
 		o_st
 		welcome_m(mood)
 		while true
@@ -206,6 +231,7 @@ class Todo
 		line
 		title("\t\tToDo Count")
 		line
+		w
 		result?("You have #{@@todo_count} task(s) currently in Todo","#047C37")
 		line
 	end
@@ -219,7 +245,7 @@ class Todo
 =end
 	def list
 		o_st ; line;
-		title("\t\tToDos List")
+		title("\t\tToDo List")
 		line
 		for todo , _ in @@todo_base.to_a.sort!
 			content("#{todo}")
@@ -230,7 +256,7 @@ class Todo
 	def new_task
 		while true
 			o_st
-			title("ADD TODO ☻ ")
+			title("ADD TODO ☻ + ")
 			prompt?("Task Name")       ; task_name = input?
 			prompt?("Completion Date") ; completion_date = input?
 			add_todo(task_name , completion_date) ;response = add_new_task?
@@ -302,10 +328,39 @@ class Todo
 		return gets.chomp.downcase
 	end
 
-end
+	def on_demand_connection
+		# gets as a connection to our data source as and
+		# when we need it.
+		#solved bug
+		# @@sth ||= Base::MyBase.new.make_connection
+		# return @@sth
+		@@sth = Base::MyBase.new.make_connection
+		return @@sth
+	end
 
+	# polymorphous statement handler (P-S-H)
+	def handler(statement_type ="select", sql_query)
+		# prepare connection to the datasource for sauthentication
+	    osth = on_demand_connection # do something with the connection
+		case statement_type
+		  when "insert"
+			 osth.do(sql_query)
+		  when "update"
+			osth.do(sql_query)
+		  when "delete"
+			osth.do(sql_query)
+		  else
+			result_set = osth.select_all(sql_query)
+			#pls before you leave ensure that connection to data source is terminated
+			return result_set
+		end
+		ensure
+		  # ok i will ensure connection is no more thank you!
+		  osth.disconnect if osth
+	end
+end
 #Object initialization and  method / class method calls
 Todo.new
 # update
 # notifications
-# database integration
+# database integration -halfway
