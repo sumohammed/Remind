@@ -1,10 +1,12 @@
 # This code will ensure the connection and data manipulation, for todo app
 require 'dbi'
+require 'etc'
 module Base
 	class MyBase
 	#database framework(DBI):dbd(SQLite3):path
 	#CONSTANT
-	URL ="DBI:SQLite3:/home/asare/Desktop/App/rubyApp/db/todo.sqlite"
+	user = Etc.getlogin
+	URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/Desktop/App/rubyApp/db/todo.sqlite"
 	# CLASS/STATICS
 		def make_connection
 			begin

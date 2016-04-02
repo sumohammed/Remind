@@ -1,14 +1,10 @@
 =begin
 	A simple TODOs App
 =end
+# require "rubygems"
 require 'paint'
 require_relative 'base'
 class Todo
-  #class fields / or static fields
-	@@todo_base = {}
-	@@todo_count = 0
-	 # sql querry statement handler (@@sth)- will handle all sql statements in this space
-	@@sth = nil
 =begin
 	initialize each activity with the Activity Name and Completion Date
 	automatically the activity is added with the time stamp i.e
@@ -31,7 +27,7 @@ class Todo
 		while true
 			count = 0
 		    # request user login credentials
-		    o_st ;  title("TODO ☻")
+		    o_st ;  title("TODO ☻ ")
 		  	commandPrompt("Username")
 		    un = input?
 		 	commandPrompt("Password for #{un.split[0]}")
@@ -67,14 +63,15 @@ class Todo
 	end
 	def line
 
-		puts Paint[" "+"________________________________________",:white,:bold]
+		puts Paint[" "+"____________________________________________________________________________",:white,:bold]
 	end
 	def o_st
+
 		puts ""
 	end
 
 	def content(type="puts",colour="#00AFFF",content)
-		if type == "print"
+		if  type == "print"
 			print Paint[" "+content, colour,:bright]
 		else
 			puts  Paint[" "+content, colour,:bright]
@@ -85,11 +82,11 @@ class Todo
 		if message == "exit"
 		  print Paint[" "+"Are you sure of exiting Todo? Y|n:"   ,"#DE1515" ,:bright]
 		elsif message == "invalid_exit_code"
-		  puts Paint[" "+"Invalid exit code! *#{aux}* (ECError)" ,"#DE1515" ,:bright]
+		  puts  Paint[" "+"Invalid exit code! *#{aux}* (ECError)" ,"#DE1515" ,:bright]
 		elsif message == "invalid_option"
-		  puts Paint[" "+"Invalid option! *#{aux}*    (OCError)" ,"#DE1515" ,:bright]
+		  puts  Paint[" "+"Invalid option! *#{aux}*    (OCError)" ,"#DE1515" ,:bright]
 		else
-		  puts Paint[" "+"Invalid command! *#{aux}* (typing help or -h will show vaild commands ) (CCError)" ,"#DE1515" ,:bright]
+		  puts  Paint[" "+"Invalid command! *#{aux}* (typing help or -h will show vaild commands ) (CCError)" ,"#DE1515" ,:bright]
 		end
 	end
 
@@ -100,7 +97,7 @@ class Todo
 	def header
 		print Paint["
 		\t\t\t\t ☻  WELCOME ☻ 
-		\tTodo implements all the essential features of a collaborative\n\t\t\t\ttask management app.", mood ,:bright ,:underline]; 
+		\tTodo implements all the essential features of a collaborative\n\t\t\t\ttask management app.", mood ,:bright ,:underline];
 		content("puts", "#fffff", "Type help or -h to get started" );
 	end
 
@@ -163,6 +160,10 @@ class Todo
 				#EXIT
 				when "!"
 					bye
+				when "clear"
+					system("clear")
+				when "@"
+					system("clear")
 				else
 					warn!("command", command)
 			end
@@ -172,9 +173,9 @@ class Todo
 	this method is called only by the constructor and not
     outside
 =end
-	def add_todo(task , completion_date)
-		@@todo_base[task] = [completion_date , Time.new]
-		@@todo_count+=1
+	def add_todo(task , completion_date , task_description)
+		time = Time.new
+		handler("insert", "INSERT INTO task (tn , tind, tcd , td) VALUES ('#{task}' ,'#{time}', '#{completion_date}' , '#{task_description}')")
 	end
 =begin
 	this method prints to the standard output i.e console
@@ -190,32 +191,45 @@ class Todo
 				o_st
 				title("\t    Todo Info (all)")
 				line
-				@@todo_base.each do |details|
-				specific_task , other_details  = details
-				completion_date = other_details[0]
-				input_date		= other_details[1]
-				title("\t    Todo info(#{specific_task})")
+				handler("SELECT * FROM task").each do |row|
+				title("\t    Todo Info(#{row[1]})")
 				line
-				content("ToDo            : #{specific_task}")
-				content("Completion Date : #{completion_date}")
-				content("Input Date      : #{input_date}")
+				content("ToDo            : #{row[1]}")
+				content("Entry Date      : #{row[2]}")
+				content("Completion Date : #{row[3]}")
+				o_st
+				# type="puts",colour="#00AFFF",content,underline="true"
+				title("puts","#E6E116","Description:")
+				content("#{row[4]}")
 				line
 				end
-				line
 			else
-				completion_date , input_date = @@todo_base[task]
-				if completion_date == nil && input_date == nil
-					result?("0 match : no such todo found!", "#EC1726")
-					return
-				else
-					title("\t\tToDo Info #{task}")
-					line
-					content("ToDo            : #{task}")
-					content("Completion Date : #{completion_date}")
-					content("Input Date      : #{input_date}")
-					o_st
-					line
-				end
+				count = 0
+				rows = handler("SELECT * FROM task WHERE tn = '#{task}'")
+				rows.each{count+=1}
+				case count
+					when 0
+						line
+						result?("0 match, no such todo found!", "#EC1726")
+						line 
+						return
+					else
+						count = 0
+						handler("SELECT * FROM task WHERE tn = '#{task}'").each do |r|
+						line
+						title("\t    Todo Info(#{r[1]}->#{count+=1})")
+						line
+						content("ToDo            : #{r[1]}")
+						content("Entry Date      : #{r[2]}")
+						content("Completion Date : #{r[3]}")
+						o_st
+						title("puts","#E6E116","Description:")
+						content("#{r[4]}")
+						line
+						end
+					end
+						result?("#{count} matches ", "#EC1726")
+						line
 		end
 	end
 =begin
@@ -227,12 +241,18 @@ class Todo
 	the class
 =end
 	def count
-		o_st
+		o_st; line;
+		title("\t\tTodo Count")
 		line
-		title("\t\tToDo Count")
-		line
-		w
-		result?("You have #{@@todo_count} task(s) currently in Todo","#047C37")
+		count = 0 ; handler("SELECT * FROM task ").each do |row|
+			count+=1
+		end
+			case count
+			when 0
+				result?("You have #{count} task currently in Todo","#047C37")
+			else
+			    result?("You have #{count} tasks currently in Todo","#047C37")
+			end
 		line
 	end
 =begin
@@ -245,10 +265,10 @@ class Todo
 =end
 	def list
 		o_st ; line;
-		title("\t\tToDo List")
+		title("\t\tTodo List")
 		line
-		for todo , _ in @@todo_base.to_a.sort!
-			content("#{todo}")
+		handler("SELECT * FROM task").each  do |row|
+			content("#{row[1]}")
 		end
 		line
 	end
@@ -259,21 +279,25 @@ class Todo
 			title("ADD TODO ☻ + ")
 			prompt?("Task Name")       ; task_name = input?
 			prompt?("Completion Date") ; completion_date = input?
-			add_todo(task_name , completion_date) ;response = add_new_task?
+			prompt?("Task Description"); task_description = input?
+			add_todo(task_name , completion_date, task_description) ;response = add_new_task?
 			    if    response[0] == "n" or response[0] =="no"
-				     line ; break
-			    elsif response[0] == "y" or response[0] == "yes"
-				     line ; next
-			    else
-				     warn!("invalid_option", response[0])
+				      line ; break
+			elsif response[0] == "y" or response[0] == "yes"
+				      line ; next
+			else
+				      warn!("invalid_option", response[0])
 				     return
-				end
+			 end
 		end
 	end
 
 	def add_new_task?
 		title("print","Add new todo? Y|n:"); response = input?.split
 		return response
+	end
+	def clear
+		system("clear")
 	end
 
 	def help
@@ -285,17 +309,17 @@ class Todo
 		|****************|**********************************************|
 		|     add ,a     |     Add a new Todo                           |
 		|****************|**********************************************|
-		|     info,i      |     Display the full details of a task      |
+		|     info,i     |     Display the full details of a task       |
 		|****************|**********************************************|
-		|     count,c     |     Gives a total count of all Todos        |
+		|     count,c    |     Gives a total count of all Todos         |
 		|****************|**********************************************|
-		|     list,l      |     List all Todos available                |
+		|     list,l     |     List all Todos available                 |
 		|****************|**********************************************|
 		|    update,u    |     Updates a Todo                           |
 		|****************|**********************************************|
 		|    remove,r    |     Removes an entry completely from Todo    |
 		|****************|**********************************************|
-		|                |                                              |
+		|      clear, @  |     Clear terminal screen                    |
 		|****************|**********************************************|
 		|       v        |     About Todo                               |
 		|****************|**********************************************|
@@ -330,7 +354,7 @@ class Todo
 
 	def on_demand_connection
 		# gets as a connection to our data source as and
-		# when we need it.
+		# when need.
 		#solved bug
 		# @@sth ||= Base::MyBase.new.make_connection
 		# return @@sth
