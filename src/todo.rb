@@ -228,7 +228,7 @@ class Todo
 						line
 						end
 					end
-						result?("#{count} matches ", "#EC1726")
+						result?("#{count} matche(s) ", "#F46E15")
 						line
 		end
 	end

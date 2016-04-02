@@ -5,7 +5,6 @@ module Base
 	class MyBase
 	#database framework(DBI):dbd(SQLite3):path
 	#CONSTANT
-	user = Etc.getlogin
 	URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/Desktop/App/rubyApp/db/todo.sqlite"
 	# CLASS/STATICS
 		def make_connection
