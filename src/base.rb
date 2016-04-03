@@ -5,7 +5,7 @@ module Base
 	class MyBase
 	#database framework(DBI):dbd(SQLite3):path
 	#CONSTANT
-	URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/Desktop/App/rubyApp/db/todo.sqlite"
+	URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/.todo/.db/todo.sqlite"
 	# CLASS/STATICS
 		def make_connection
 			begin
