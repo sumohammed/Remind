@@ -5,4 +5,4 @@ task management app.
 
 ###Installation
 =
-$ git clone https://github.com/kofiasare/rubyApp.git ~/.todo
+	$ git clone https://github.com/kofiasare/rubyApp.git ~/.todo
