@@ -27,13 +27,11 @@ class Todo
 		while true
 			count = 0
 		    # request user login credentials
-		    o_st ;  title("TODO ☻ ")
-		  	commandPrompt("Username")
-		    un = input?
-		 	commandPrompt("Password for #{un.split[0]}")
+		    o_st ;  title("Todo ☻ ")
+		 	commandPrompt("Password for #{Etc.getlogin}")
 		 	pw =input?
 		 	#(P-S-H)-IN THE SELECT CONTEXT
-		 	handler("SELECT * FROM user WHERE us = '#{un.split[0]}' and pw = '#{pw.split[0]}'").each{ |row|
+		 	handler("SELECT * FROM user WHERE us = '#{Etc.getlogin}' and pw = '#{pw.split[0]}'").each{ |row|
 		 	  count+=1
 		 	}
 		 	case count
@@ -194,7 +192,7 @@ class Todo
 				handler("SELECT * FROM task").each do |row|
 				title("\t    Todo Info(#{row[1]})")
 				line
-				content("ToDo            : #{row[1]}")
+				content("Todo            : #{row[1]}")
 				content("Entry Date      : #{row[2]}")
 				content("Completion Date : #{row[3]}")
 				o_st
@@ -219,7 +217,7 @@ class Todo
 						line
 						title("\t    Todo Info(#{r[1]}->#{count+=1})")
 						line
-						content("ToDo            : #{r[1]}")
+						content("Todo            : #{r[1]}")
 						content("Entry Date      : #{r[2]}")
 						content("Completion Date : #{r[3]}")
 						o_st
@@ -319,7 +317,7 @@ class Todo
 		|****************|**********************************************|
 		|    remove,r    |     Removes an entry completely from Todo    |
 		|****************|**********************************************|
-		|      clear, @  |     Clear terminal screen                    |
+		|    clear, @    |     Clear terminal screen                    |
 		|****************|**********************************************|
 		|       v        |     About Todo                               |
 		|****************|**********************************************|
@@ -333,7 +331,7 @@ class Todo
 		if  exit_status[0] == "n" or exit_status[0] =="no"
 			line
 		elsif  exit_status[0] == "y" or exit_status[0] == "yes"
-			exit
+			clear ; exit;
 		else
 			warn!("invalid_exit_code", exit_status[0])
 			return
@@ -383,7 +381,7 @@ class Todo
 		  osth.disconnect if osth
 	end
 end
-#Object initialization and  method / class method calls
+
 Todo.new
 # update
 # notifications

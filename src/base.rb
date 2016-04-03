@@ -1,12 +1,10 @@
 # This code will ensure the connection and data manipulation, for todo app
 require 'dbi'
 require 'etc'
+
 module Base
 	class MyBase
-	#database framework(DBI):dbd(SQLite3):path
-	#CONSTANT
-	URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/.todo/.db/todo.sqlite"
-	# CLASS/STATICS
+		URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/.todo/.db/todo.sqlite"
 		def make_connection
 			begin
 				if dbh = DBI.connect(URL)
@@ -15,7 +13,7 @@ module Base
 			rescue DBI::DatabaseError => e
 				   puts  "#{e.err}"
 				   puts  "#{e.errstr}"
-				   return false
+				   return
 			end
 		end
 	end
