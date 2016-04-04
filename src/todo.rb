@@ -11,7 +11,18 @@ class Todo
 	the activity entry date and time
 =end
 	def initialize
-		login
+		file = File.open(".todo.txt") if File::exists?(".todo.txt")
+		if file == nil  then
+		   f_encounter
+		   file = File.new(".todo.txt","a+")
+		   file.syswrite("broken\n") ;file.close;
+		   clear ; login
+		else
+			logins = file.sysread(6) ;file.close;
+			if logins == "broken" then
+				login
+			end
+		end
 	end
 
 	private
@@ -27,21 +38,57 @@ class Todo
 		while true
 			count = 0
 		    # request user login credentials
-		    o_st ;  title("Todo ☻ ")
+		    o_st ;  title("Todo ☻ ---> (!) to exit")
 		 	commandPrompt("Password for #{Etc.getlogin}")
 		 	pw =input?
-		 	#(P-S-H)-IN THE SELECT CONTEXT
-		 	handler("SELECT * FROM user WHERE us = '#{Etc.getlogin}' and pw = '#{pw.split[0]}'").each{ |row|
-		 	  count+=1
-		 	}
-		 	case count
-		 	   	when 1
-		 	   		start_application
-		 	   	else
-		 	   	    content("puts","#E30000","Invalid login credentials , please try again")
-		 	   		next
-		 	end
+		 	if pw == "!" 
+			bye
+			elsif pw == "!@#"
+				clear; admin;
+			else
+			 	#(P-S-H)-IN THE SELECT CONTEXT
+			 	handler("SELECT * FROM user WHERE us = '#{Etc.getlogin}' and pw = '#{pw.split[0]}'").each{ |row|
+			 	  count+=1
+			 	}
+			 	case count
+			 	   	when 1
+			 	   		clear
+			 	   		start_application
+			 	   	else
+			 	   	    content("puts","#E30000","Invalid login credentials , please try again")
+			 	   		next
+			 	end
+			end
 		end
+	end
+
+	def admin
+		while true
+			count = 0
+		    # request user login credentials
+		    o_st ;  title("Todo ☻  ---> (!) to exit")
+		 	commandPrompt("Password for [admin]")
+		 	pw =input?
+		 	if pw == "!" 
+			bye
+			elsif pw == "u"
+				clear ; login;
+			else
+			 	#(P-S-H)-IN THE SELECT CONTEXT
+			 	handler("SELECT * FROM user WHERE us = 'admin' and pw = '#{pw.split[0]}'").each{ |row|
+			 	  count+=1
+			 	}
+			 	case count
+			 	   	when 1
+			 	   		clear
+			 	   		start_application
+			 	   	else
+			 	   	    content("puts","#E30000","Invalid login credentials , please try again")
+			 	   		next
+			 	end
+			end
+		end
+	end
 	end
 
 	def commandPrompt(command)
@@ -186,6 +233,7 @@ class Todo
 		task = request.downcase.chomp
 		case task
 			when "all"
+				clear
 				o_st
 				title("\t    Todo Info (all)")
 				line
@@ -261,8 +309,8 @@ class Todo
 	in other words this method cannot operate on an object but rather
 	the class
 =end
-	def list
-		o_st ; line;
+	def list	
+		clear ; o_st ; line;
 		title("\t\tTodo List")
 		line
 		handler("SELECT * FROM task").each  do |row|
@@ -274,7 +322,7 @@ class Todo
 	def new_task
 		while true
 			o_st
-			title("ADD TODO ☻ + ")
+			title("ADD A TODO ☻ + ")
 			prompt?("Task Name")       ; task_name = input?
 			prompt?("Completion Date") ; completion_date = input?
 			prompt?("Task Description"); task_description = input?
@@ -299,6 +347,7 @@ class Todo
 	end
 
 	def help
+		clear
 		content("print","","
 		Usage : <command>"); content("puts","#DD0202","[<args>]");
 		content("puts", "","\t\tSome useful Todo commands are:
@@ -345,6 +394,18 @@ class Todo
 		header
 	end
 
+	def f_encounter
+		content("puts","#FFAF00","Hello ☻ , #{Etc.getlogin} thanks for using Todo, since this your first time\n kindly create a password for continue usage or type (!) to exit.")
+		o_st ; commandPrompt("Password here"); pw =input?;
+		   if pw == "!" 
+				bye
+		elsif pw =="!@#"
+				clear
+				admin
+		 else
+			handler("insert", "INSERT INTO user ( us, pw ) VALUES ('#{Etc.getlogin}' , '#{pw}')")
+		end
+	end
 	def input?
 		# always gets the input
 		return gets.chomp.downcase
@@ -356,8 +417,8 @@ class Todo
 		#solved bug
 		# @@sth ||= Base::MyBase.new.make_connection
 		# return @@sth
-		@@sth = Base::MyBase.new.make_connection
-		return @@sth
+		sth = Base::MyBase.new.make_connection
+		return sth
 	end
 
 	# polymorphous statement handler (P-S-H)
@@ -380,8 +441,6 @@ class Todo
 		  # ok i will ensure connection is no more thank you!
 		  osth.disconnect if osth
 	end
-end
-
 Todo.new
 # update
 # notifications
