@@ -11,6 +11,19 @@ class Todo
 	the activity entry date and time
 =end
 	def initialize
+		check_broken
+	end
+
+	private
+	def mood
+      a = []
+      a << rand(257)
+      a << rand(257)
+      a << rand(257)
+      return a
+	end
+
+	def check_broken
 		file = File.open(".todo.txt") if File::exists?(".todo.txt")
 		if file == nil  then
 		   f_encounter
@@ -25,23 +38,14 @@ class Todo
 		end
 	end
 
-	private
-	def mood
-      a = []
-      a << rand(257)
-      a << rand(257)
-      a << rand(257)
-      return a
-	end
-
 	def login
 		while true
 			count = 0
 		    # request user login credentials
-		    o_st ;  title("Todo ☻ ---> (!) to exit")
+		    o_st ;  title("Todo ☻  ~~~> (!) to exit")
 		 	commandPrompt("Password for #{Etc.getlogin}")
 		 	pw =input?
-		 	if pw == "!" 
+		 	if pw == "!"
 			bye
 			elsif pw == "!@#"
 				clear; admin;
@@ -66,13 +70,13 @@ class Todo
 		while true
 			count = 0
 		    # request user login credentials
-		    o_st ;  title("Todo ☻  ---> (!) to exit")
+		    o_st ;  title("Todo ☻  ~~~> (!) to exit")
 		 	commandPrompt("Password for [admin]")
 		 	pw =input?
 		 	if pw == "!" 
-			bye
+			   	bye
 			elsif pw == "u"
-				clear ; login;
+				  clear ; check_broken
 			else
 			 	#(P-S-H)-IN THE SELECT CONTEXT
 			 	handler("SELECT * FROM user WHERE us = 'admin' and pw = '#{pw.split[0]}'").each{ |row|
@@ -130,6 +134,8 @@ class Todo
 		  puts  Paint[" "+"Invalid exit code! *#{aux}* (ECError)" ,"#DE1515" ,:bright]
 		elsif message == "invalid_option"
 		  puts  Paint[" "+"Invalid option! *#{aux}*    (OCError)" ,"#DE1515" ,:bright]
+		elsif message =="matcherror"
+		  puts  Paint[" "+"Passwords do not match! (MError)" ,"#DE1515" ,:bright]
 		else
 		  puts  Paint[" "+"Invalid command! *#{aux}* (typing help or -h will show vaild commands ) (CCError)" ,"#DE1515" ,:bright]
 		end
@@ -395,15 +401,23 @@ class Todo
 	end
 
 	def f_encounter
-		content("puts","#FFAF00","Hello ☻ , #{Etc.getlogin} thanks for using Todo, since this your first time\n kindly create a password for continue usage or type (!) to exit.")
-		o_st ; commandPrompt("Password here"); pw =input?;
-		   if pw == "!" 
-				bye
-		elsif pw =="!@#"
-				clear
-				admin
-		 else
-			handler("insert", "INSERT INTO user ( us, pw ) VALUES ('#{Etc.getlogin}' , '#{pw}')")
+		content("puts","#FFAF00","Hello ☻ , #{Etc.getlogin} Thanks for using Todo, Track your tasks with a simple todo list.\n Get things done for personal productivity and time management. \n kindly create a password for continue usage or type (!) to exit out of here.")
+		while true
+				o_st ; commandPrompt("Password"); pw =input?;
+				     if pw == "!" 
+						bye
+					 elsif pw =="!@#"
+						clear ; admin ;
+					 else
+						o_st ; commandPrompt("Confirm Password"); cpw =input?;
+		 					if cpw.eql?(pw) then
+								handler("insert", "INSERT INTO user ( us, pw ) VALUES ('#{Etc.getlogin}' , '#{pw}')")
+								break
+							else
+								warn!("matcherror")
+								next
+						end
+		 			end
 		end
 	end
 	def input?
