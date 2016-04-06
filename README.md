@@ -2,6 +2,8 @@ Todo
 =
 Todo implements all the essential features of a collaborative
 task management app.
+Track your tasks with a simple todo list. GTD system (Getting Things Done) for personal productivity and time management
+
 Installation
 =
 	Step 1.

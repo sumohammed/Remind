@@ -73,7 +73,7 @@ class Todo
 		    o_st ;  title("Todo ☻  ~~~> (!) to exit")
 		 	commandPrompt("Password for [admin]")
 		 	pw =input?
-		 	if pw == "!" 
+		 	if pw == "!"
 			   	bye
 			elsif pw == "u"
 				  clear ; check_broken
@@ -112,7 +112,7 @@ class Todo
 	end
 	def line
 
-		puts Paint[" "+"____________________________________________________________________________",:white,:bold]
+		puts Paint[" "+"______________________________________________",:white,:bold]
 	end
 	def o_st
 
@@ -129,13 +129,17 @@ class Todo
 
 	def warn!(message="invalid", aux="err")
 		if message == "exit"
-		  print Paint[" "+"Are you sure of exiting Todo? Y|n:"   ,"#DE1515" ,:bright]
+		  print Paint[" "+"Are you sure of exiting Todo? Y|n:"    , "#DE1515" ,:bright]
+		elsif message == "removal"
+		  print Paint[" "+"Are you sure of deleting the selected task? Y|n:"    , "#DE1515" ,:bright]
 		elsif message == "invalid_exit_code"
-		  puts  Paint[" "+"Invalid exit code! *#{aux}* (ECError)" ,"#DE1515" ,:bright]
+		  puts  Paint[" "+"Invalid exit code! *#{aux}* (ECError)" , "#DE1515" ,:bright]
+		elsif message == "invalid_removal_option"
+		  puts  Paint[" "+"Invalid delete option ! *#{aux}* (DOError)" , "#DE1515" ,:bright]
 		elsif message == "invalid_option"
-		  puts  Paint[" "+"Invalid option! *#{aux}*    (OCError)" ,"#DE1515" ,:bright]
+		  puts  Paint[" "+"Invalid option! *#{aux}*    (OCError)" , "#DE1515" ,:bright]
 		elsif message =="matcherror"
-		  puts  Paint[" "+"Passwords do not match! (MError)" ,"#DE1515" ,:bright]
+		  puts  Paint[" "+"Passwords do not match! (MError)"      , "#DE1515" ,:bright]
 		else
 		  puts  Paint[" "+"Invalid command! *#{aux}* (typing help or -h will show vaild commands ) (CCError)" ,"#DE1515" ,:bright]
 		end
@@ -202,6 +206,15 @@ class Todo
 					list
 				when "l"
 					list
+				when "r"
+					if  command_options.length > 1
+						option = command_options[1]
+						remove(option)
+					else
+						list
+						title("print","#38E22E","remove which todo?:") ; task = input?
+						remove(task)
+					end
 				#ABOUT
 				when "v"
 					about
@@ -233,8 +246,46 @@ class Todo
 	the details of an activity(i.e an instance of the todos class
 	in other words the object)
 	Usage: this is called on the object by supplying the name of the
-		   activity
+	activity
 =end
+	def remove(t)
+		task = t.downcase.chomp
+		case task
+			when "all"
+				  warn!("removal") ; delete_option = input?.split
+				  if     delete_option[0] == "n" or delete_option[0] == "no"
+				         line
+				  elsif  delete_option[0] == "y" or delete_option[0] == "yes"
+					     clear ; delete_all!;
+					     list
+				  else
+					 	 warn!("invalid_removal_option", delete_option[0])
+					 	 return
+				  end
+			else
+				  warn!("removal") ; delete_option = input?.split
+				  if     delete_option[0] == "n" or delete_option[0] == "no"
+				         line
+				  elsif  delete_option[0] == "y" or delete_option[0] == "yes"
+					     clear ;  delete_task(task);
+					     list
+				  else
+					 	 warn!("invalid_removal_option", delete_option[0])
+					 	 return
+				  end
+		end
+	end
+
+
+	def delete_all!
+	 	handler("delete" , "DELETE  FROM task ")
+	 	list
+	end
+
+	def delete_task(task)!
+		 handler("DELETE FROM task WHERE tn = '#{task}'")
+	end
+
 	def info(request)
 		task = request.downcase.chomp
 		case task
@@ -263,7 +314,7 @@ class Todo
 					when 0
 						line
 						result?("0 match, no such todo found!", "#EC1726")
-						line 
+						line
 						return
 					else
 						count = 0
@@ -315,7 +366,7 @@ class Todo
 	in other words this method cannot operate on an object but rather
 	the class
 =end
-	def list	
+	def list
 		clear ; o_st ; line;
 		title("\t\tTodo List")
 		line
@@ -403,8 +454,8 @@ class Todo
 	def f_encounter
 		content("puts","#FFAF00","Hello ☻ , #{Etc.getlogin} Thanks for using Todo, Track your tasks with a simple todo list.\n Get things done for personal productivity and time management. \n kindly create a password for continue usage or type (!) to exit out of here.")
 		while true
-				o_st ; commandPrompt("Password"); pw =input?;
-				     if pw == "!" 
+				o_st; commandPrompt("Password"); pw =input?;
+				     if pw == "!"
 						bye
 					 elsif pw =="!@#"
 						clear ; admin ;
