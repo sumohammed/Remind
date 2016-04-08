@@ -5,7 +5,7 @@ require 'sqlite3'
 
 module Base
 	class MyBase
-		URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/.todo/.db/todo.sqlite"
+		URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/.remind/.db/remind.sqlite"
 		def make_connection
 			begin
 				if dbh = DBI.connect(URL)
