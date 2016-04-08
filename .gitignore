@@ -1,0 +1,2 @@
+# ignoring all db changes
+/.db/*.sqlite
