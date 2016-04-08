@@ -1,7 +1,6 @@
 =begin
 	A simple TODOs App
 =end
-# require "rubygems"
 require 'paint'
 require_relative 'base'
 class Todo
