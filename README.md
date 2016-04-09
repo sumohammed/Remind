@@ -20,4 +20,7 @@ Installation
 		   b. Start Reimnd ☻ globally (temporal)
 		      ~/.remind/remind
 
+Uninstall
+=
+
 
