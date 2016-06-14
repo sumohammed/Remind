@@ -1,0 +1,50 @@
+.container-ui {
+	width: 100%;
+}
+
+/* index page */
+.index {
+	background-image: url("remind.jpeg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 100vh;
+	width: 100vw;
+	color: #fff;
+	text-align: center;
+}
+
+.dark-layer {
+	background-color: rgba(0,0,0,0.6);
+	height: 100%;	
+}
+
+.buttons {
+	color: #fff;
+	border-bottom: 2px solid white;
+	padding: 5px 5px;
+	display: inline-block;
+	font-size: 25px;
+}
+
+/* Login & signin */
+
+.auth {
+    margin: 0% 20%;
+    .form {
+		margin: auto;
+	    width: 60%;
+	    padding: 10px;
+	    input[type=text], input[type=email], input[type=submit], input[type=password] {
+			width: 100%;
+		}
+		span input[type=checkbox] {
+			left: 0px;
+		}
+	}
+}
+
+/*emergency responders
+find locations where disasters are
+finds people in need
+*/
