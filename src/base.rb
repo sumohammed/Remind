@@ -5,17 +5,15 @@ require 'sqlite3'
 
 module Base
   class MyBase
-    URL ="DBI:SQLite3:/home/#{Etc.getlogin.to_s}/.remind/.db/remind.sqlite"
-	def make_connection
-	  begin
-	    if dbh = DBI.connect(URL)
-	      return dbh
-	    end
-	  rescue DBI::DatabaseError => e
-	    puts  "#{e.err}"
-		puts  "#{e.errstr}"
-		return
-	  end
-	end
+    URL = "DBI:SQLite3:/home/#{Etc.getlogin}/.remind/.db/remind.sqlite".freeze
+    def make_connection
+      if dbh = DBI.connect(URL)
+        return dbh
+      end
+    rescue DBI::DatabaseError => e
+      puts e.err.to_s
+      puts e.errstr.to_s
+      return
+    end
   end
 end
