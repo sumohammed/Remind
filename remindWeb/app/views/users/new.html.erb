@@ -1,8 +1,9 @@
+<div class="head-auth">
+	<%= render 'shared/header' %>
+</div>
+
 <div class="auth">
 	<div class="form">
-		<% provide(:title, 'Sign up') %>
-		<h1>Sign Up</h1>
-
 		<%= form_for(@user) do |f| %>
 			<%= render 'shared/error_messages' %>
 
@@ -18,7 +19,7 @@
 			<%= f.label :password_confirmation %>
 			<%= f.password_field :password_confirmation %>
 
-			<%= f.submit "Create my account", class: "btn btn-primary" %>
+			<%= f.submit "Create my account", class: "button-primary" %>
 		<% end %>
 	</div>
 </div>

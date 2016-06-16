@@ -1,12 +1,12 @@
 <div class="index">
-	<div class="dark-layer">
-		<div class="container">
-			<div class="row">
-				<header>
-					<h1>Remind</h1>
-					<nav class="buttons">login</nav>
-					<nav class="buttons">login</nav>
-				</header>
+	<header>
+		<%= render 'shared/header' %>
+	</header>
+	<div class="container">
+		<div class="row">
+			<div class="desc">
+				<h1>Stay in control <br> of your time</h1>
+				<%= link_to "Try Remind", signup_url, class: "button button-primary" %>
 			</div>
 		</div>
 	</div>
